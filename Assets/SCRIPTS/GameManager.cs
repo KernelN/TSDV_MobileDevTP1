@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 using System.Collections;
+using TMPro;
 
 public class GameManager : MonoBehaviour {
     public static GameManager Instancia;
@@ -18,8 +19,8 @@ public class GameManager : MonoBehaviour {
     bool ConteoRedresivo = true;
     public Rect ConteoPosEsc;
     public float ConteoParaInicion = 3;
-    public Text ConteoInicio;
-    public Text TiempoDeJuegoText;
+    public TextMeshProUGUI ConteoInicio;
+    public TextMeshProUGUI TiempoDeJuegoText;
 
     public float TiempEspMuestraPts = 3;
 
