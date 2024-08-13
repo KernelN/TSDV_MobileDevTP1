@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Serialization;
 
 public class Bolsa : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class Bolsa : MonoBehaviour
 	
 	bool Desapareciendo;
 	public GameObject Particulas;
-	public float TiempParts = 2.5f;
+	[FormerlySerializedAs("TiempParts")] public float TiempoRespawn = 2.5f;
+	float timerRespawn;
 
 	// Use this for initialization
 	void Start () 
@@ -22,17 +24,15 @@ public class Bolsa : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		if(!Desapareciendo) return;
 		
-		if(Desapareciendo)
+		timerRespawn -= Time.deltaTime;
+		if (timerRespawn <= 0)
 		{
-			TiempParts -= Time.deltaTime;
-			if(TiempParts <= 0)
-			{
-				GetComponent<Renderer>().enabled = true;
-				GetComponent<Collider>().enabled = true;
-			}
+			GetComponent<Renderer>().enabled = true;
+			GetComponent<Collider>().enabled = true;
+			Desapareciendo = false;
 		}
-		
 	}
 	
 	void OnTriggerEnter(Collider coll)
@@ -47,11 +47,11 @@ public class Bolsa : MonoBehaviour
 	
 	public void Desaparecer()
 	{
-		Particulas.SetActive(true);
+		Instantiate(Particulas, transform.position, Quaternion.identity);
 		Desapareciendo = true;
+		timerRespawn = TiempoRespawn;
 		
 		GetComponent<Renderer>().enabled = false;
 		GetComponent<Collider>().enabled = false;
-	
 	}
 }
