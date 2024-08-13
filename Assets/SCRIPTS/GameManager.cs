@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -43,12 +44,10 @@ public class GameManager : MonoBehaviour {
     void Awake() {
         GameManager.Instancia = this;
     }
-
     IEnumerator Start() {
         yield return null;
         IniciarTutorial();
     }
-
     void Update() {
         //REINICIAR
         if (Input.GetKey(KeyCode.Alpha0)) {
@@ -123,6 +122,10 @@ public class GameManager : MonoBehaviour {
         }
 
         TiempoDeJuegoText.transform.parent.gameObject.SetActive(EstAct == EstadoJuego.Jugando && !ConteoRedresivo);
+    }
+    void OnDestroy()
+    {
+        GameManager.Instancia = null;
     }
 
     //----------------------------------------------------------//
