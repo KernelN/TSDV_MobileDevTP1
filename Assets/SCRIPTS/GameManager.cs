@@ -61,18 +61,11 @@ public class GameManager : MonoBehaviour {
 
         switch (EstAct) {
             case EstadoJuego.Calibrando:
-
-                if (Input.GetKeyDown(KeyCode.W)) {
+                if (InputManager.inst.Axis1.y > 0) 
                     Player1.Seleccionado = true;
-                }
-
-                if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                if (InputManager.inst.Axis2.y > 0) 
                     Player2.Seleccionado = true;
-                }
-
                 break;
-
-
             case EstadoJuego.Jugando:
 
                 //SKIP LA CARRERA

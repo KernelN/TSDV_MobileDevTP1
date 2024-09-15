@@ -2,57 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PalletMover : ManejoPallets {
-
-    public MoveType miInput;
-    public enum MoveType {
-        WASD,
-        Arrows
-    }
-
+public class PalletMover : ManejoPallets
+{
+    public bool isPlayer1 = true;
     public ManejoPallets Desde, Hasta;
-    bool segundoCompleto = false;
+    int paso = 1;
 
-    private void Update() {
-        switch (miInput) {
-            case MoveType.WASD:
-                if (!Tenencia() && Desde.Tenencia() && Input.GetKeyDown(KeyCode.A)) {
+    private void Update() 
+    {
+        Vector2 axis = isPlayer1 ? InputManager.inst.Axis1 : InputManager.inst.Axis2;
+        
+        if(axis.sqrMagnitude == 0) return;
+        
+        bool tenencia = Tenencia();
+
+        switch (paso)
+        {
+            case 1:
+                if (!tenencia && Desde.Tenencia() && axis.x < 0)
                     PrimerPaso();
-                }
-                if (Tenencia() && Input.GetKeyDown(KeyCode.S)) {
-                    SegundoPaso();
-                }
-                if (segundoCompleto && Tenencia() && Input.GetKeyDown(KeyCode.D)) {
-                    TercerPaso();
-                }
                 break;
-            case MoveType.Arrows:
-                if (!Tenencia() && Desde.Tenencia() && Input.GetKeyDown(KeyCode.LeftArrow)) {
-                    PrimerPaso();
-                }
-                if (Tenencia() && Input.GetKeyDown(KeyCode.DownArrow)) {
+            case 2:
+                if (tenencia && axis.y < 0)
                     SegundoPaso();
-                }
-                if (segundoCompleto && Tenencia() && Input.GetKeyDown(KeyCode.RightArrow)) {
-                    TercerPaso();
-                }
                 break;
-            default:
+            case 3:
+                if (tenencia && axis.x > 0)
+                    TercerPaso();
                 break;
         }
     }
 
     void PrimerPaso() {
         Desde.Dar(this);
-        segundoCompleto = false;
+        paso++;
     }
     void SegundoPaso() {
         base.Pallets[0].transform.position = transform.position;
-        segundoCompleto = true;
+        paso++;
     }
     void TercerPaso() {
         Dar(Hasta);
-        segundoCompleto = false;
+        paso = 1;
     }
 
     public override void Dar(ManejoPallets receptor) {
