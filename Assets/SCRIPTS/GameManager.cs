@@ -42,7 +42,13 @@ public class GameManager : MonoBehaviour {
     //--------------------------------------------------------//
 
     void Awake() {
-        GameManager.Instancia = this;
+        if (Instancia)
+        {
+            Destroy(this);
+            return;
+        }
+        
+        Instancia = this;
     }
     IEnumerator Start() {
         yield return null;
@@ -118,7 +124,8 @@ public class GameManager : MonoBehaviour {
     }
     void OnDestroy()
     {
-        GameManager.Instancia = null;
+        if (Instancia == this)
+            Instancia = null;
     }
 
     //----------------------------------------------------------//

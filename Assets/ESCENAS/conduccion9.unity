@@ -74550,10 +74550,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Intervalo: 0.8
-  Imagenes:
-  - {fileID: 2800000, guid: 2c9ac95f461fb0448aca4408de9647dc, type: 3}
-  - {fileID: 2800000, guid: f836f4a482f17844b801b9ceb13c1f8a, type: 3}
-  - {fileID: 2800000, guid: b7e088a57ed74ae4ebb26597dfb96cd7, type: 3}
+  ImagenesGetter:
+    basePath: UI/Tutorial/
+    fileNames:
+    - NewTut1
+    - NewTut2
+    - NewTut3
 --- !u!114 &12568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74567,10 +74569,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Intervalo: 0.8
-  Imagenes:
-  - {fileID: 2800000, guid: 2c9ac95f461fb0448aca4408de9647dc, type: 3}
-  - {fileID: 2800000, guid: f836f4a482f17844b801b9ceb13c1f8a, type: 3}
-  - {fileID: 2800000, guid: b7e088a57ed74ae4ebb26597dfb96cd7, type: 3}
+  ImagenesGetter:
+    basePath: UI/Tutorial/
+    fileNames:
+    - NewTut1
+    - NewTut2
+    - NewTut3
 --- !u!114 &12642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74583,12 +74587,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b714c2aa2dd4752478b0be8db1bfa03b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ruta: UI/Tutorial/
+  FilesDelTutoGetter:
+    basePath: UI/Tutorial/
+    fileNames:
+    - NewTut1
+    - NewTut2
+    - NewTut3
   FilesDelTuto:
   - NewTut1
   - NewTut2
   - NewTut3
   Intervalo: 1.5
+  FilesDeCalibGetter:
+    basePath: UI/Tutorial/
+    fileNames:
+    - PreTut1
+    - PreTut2
   FilesDeCalib:
   - PreTut1
   - PreTut2
@@ -85939,6 +85953,51 @@ PrefabInstance:
     - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
         type: 3}
       propertyPath: FilesDelTuto.Array.data[2]
+      value: NewTut3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
+        type: 3}
+      propertyPath: FilesDeCalibGetter.basePath
+      value: UI/Tutorial/
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
+        type: 3}
+      propertyPath: FilesDelTutoGetter.basePath
+      value: UI/Tutorial/
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
+        type: 3}
+      propertyPath: FilesDeCalibGetter.fileNames.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
+        type: 3}
+      propertyPath: FilesDelTutoGetter.fileNames.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
+        type: 3}
+      propertyPath: FilesDeCalibGetter.fileNames.Array.data[0]
+      value: PreTut1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
+        type: 3}
+      propertyPath: FilesDeCalibGetter.fileNames.Array.data[1]
+      value: PreTut2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
+        type: 3}
+      propertyPath: FilesDelTutoGetter.fileNames.Array.data[0]
+      value: NewTut1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
+        type: 3}
+      propertyPath: FilesDelTutoGetter.fileNames.Array.data[1]
+      value: NewTut2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748825461727488410, guid: 7b1c22e88ec0c034580d9d223642be1e,
+        type: 3}
+      propertyPath: FilesDelTutoGetter.fileNames.Array.data[2]
       value: NewTut3
       objectReference: {fileID: 0}
     - target: {fileID: 5531048167618967695, guid: 7b1c22e88ec0c034580d9d223642be1e,

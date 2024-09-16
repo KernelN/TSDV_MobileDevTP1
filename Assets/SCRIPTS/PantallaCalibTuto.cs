@@ -1,18 +1,17 @@
+using System;
 using UnityEngine;
 using System.Collections;
-using Universal.Loading.Images;
+using Universal.Loading.UI;
 
-public class PantallaCalibTuto : MonoBehaviour, IImgLoaderUser
+public class PantallaCalibTuto : MonoBehaviour
 {
-    [SerializeField] string Ruta = "UI/Tutorial/";
-
-    public string[] FilesDelTuto;
+    public LoadTexturesCommand FilesDelTutoGetter;
     Texture2D[] ImagenesDelTuto;
     public float Intervalo = 1.2f; //tiempo de cada cuanto cambia de imagen
     float TempoIntTuto = 0;
     int EnCursoTuto = 0;
 
-    public string[] FilesDeCalib;
+    public LoadTexturesCommand FilesDeCalibGetter;
     Texture2D[] ImagenesDeCalib;
     int EnCursoCalib = 0;
     float TempoIntCalib = 0;
@@ -22,6 +21,18 @@ public class PantallaCalibTuto : MonoBehaviour, IImgLoaderUser
     public ContrCalibracion ContrCalib;
 
     // Update is called once per frame
+    void Start()
+    {
+        if (FilesDelTutoGetter != null)
+        {
+            ImagenesDelTuto = FilesDelTutoGetter.Execute();
+        }
+        if (FilesDeCalibGetter != null)
+        {
+            ImagenesDeCalib = FilesDeCalibGetter.Execute();
+        }
+    }
+
     void Update()
     {
         switch (ContrCalib.EstAct)
@@ -64,18 +75,5 @@ public class PantallaCalibTuto : MonoBehaviour, IImgLoaderUser
 
                 break;
         }
-    }
-
-    public void SetImgLoaders(LoadSpecs specs)
-    {
-        string ruta = Ruta + specs.path; //ruta con plataforma
-
-        ImagenesDelTuto = new Texture2D[FilesDelTuto.Length];
-        for (int i = 0; i < FilesDelTuto.Length; i++)
-            ImagenesDelTuto[i] = Resources.Load<Texture2D>(ruta+FilesDelTuto[i]);
-        
-        ImagenesDeCalib = new Texture2D[FilesDeCalib.Length];
-        for (int i = 0; i < FilesDeCalib.Length; i++)
-            ImagenesDeCalib[i] = Resources.Load<Texture2D>(ruta + FilesDeCalib[i]);
     }
 }
