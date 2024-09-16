@@ -49,16 +49,16 @@ public class InputManager : MonoBehaviour
         {
             //Get axis of player 1
             Vector2 axis = new Vector2();
-            axis.x = Input.GetKeyDown(KeyCode.A) ? -1 : Input.GetKeyDown(KeyCode.D) ? 1 : 0;
-            axis.y = Input.GetKeyDown(KeyCode.W) ? 1 : Input.GetKeyDown(KeyCode.S) ? -1 : 0;
+            axis.x = Input.GetKey(KeyCode.A) ? -1 : Input.GetKey(KeyCode.D) ? 1 : 0;
+            axis.y = Input.GetKey(KeyCode.W) ? 1 : Input.GetKey(KeyCode.S) ? -1 : 0;
             Axis1 = axis;
             
             //Get axis of player 2
             axis = new Vector2();
-            axis.x = Input.GetKeyDown(KeyCode.LeftArrow) ? -1 : 
-                        Input.GetKeyDown(KeyCode.RightArrow) ? 1 : 0;
-            axis.y = Input.GetKeyDown(KeyCode.UpArrow) ? 1 : 
-                        Input.GetKeyDown(KeyCode.DownArrow) ? -1 : 0;
+            axis.x = Input.GetKey(KeyCode.LeftArrow) ? -1 : 
+                        Input.GetKey(KeyCode.RightArrow) ? 1 : 0;
+            axis.y = Input.GetKey(KeyCode.UpArrow) ? 1 : 
+                        Input.GetKey(KeyCode.DownArrow) ? -1 : 0;
             Axis2 = axis;
         }
     }
