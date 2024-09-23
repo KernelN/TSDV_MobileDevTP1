@@ -1,11 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using Brinks.Gameplay;
 
 public class Respawn : MonoBehaviour 
 {
-	CheakPoint CPAct;
-	CheakPoint CPAnt;
-	
 	public float AngMax = 90;//angulo maximo antes del cual se reinicia el camion
 	int VerifPorCuadro = 20;
 	int Contador = 0;
@@ -16,30 +14,26 @@ public class Respawn : MonoBehaviour
 	bool IgnorandoColision = false;
 	public float TiempDeNoColision = 2;
 	float Tempo = 0;
+
+	ZoneManager zm;
 	
 	//--------------------------------------------------------//
 
-	// Use this for initialization
 	void Start () 
 	{
 		//restaura las colisiones
 		Physics.IgnoreLayerCollision(8,9,false);
+		zm = ZoneManager.inst;
 	}
-	
-	// Update is called once per frame
 	void Update ()
 	{
-		if(CPAct != null)
+		Contador++;
+		if (Contador == VerifPorCuadro)
 		{
-			Contador++;
-			if(Contador == VerifPorCuadro)
-			{
-				Contador = 0;
-				if(AngMax < Quaternion.Angle(transform.rotation, CPAct.transform.rotation))
-				{
+			Contador = 0;
+			if(zm.playersCpByHash.TryGetValue(transform.GetHashCode(), out Transform cp))
+				if (AngMax < Quaternion.Angle(transform.rotation, cp.rotation))
 					Respawnear();
-				}
-			}
 		}
 		
 		if(IgnorandoColision)
@@ -60,28 +54,19 @@ public class Respawn : MonoBehaviour
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		
 		gameObject.GetComponent<CarController>().SetGiro(0f);
-
-        if (CPAct.Habilitado())
+		
+		if(zm.playersCpByHash.TryGetValue(transform.GetHashCode(), out Transform cp))
 		{
-			if(GetComponent<Visualizacion>().LadoAct == Visualizacion.Lado.Der)
-				transform.position = CPAct.transform.position + CPAct.transform.right * Random.Range(RangMinDer, RangMaxDer);
+			Vector3 offset = cp.transform.right * Random.Range(RangMinDer, RangMaxDer);
+			if (GetComponent<Visualizacion>().LadoAct == Visualizacion.Lado.Der)
+				transform.position = cp.transform.position + offset;
 			else 
-				transform.position = CPAct.transform.position + CPAct.transform.right * Random.Range(RangMinDer * (-1), RangMaxDer * (-1));
-			transform.forward = CPAct.transform.forward;
-		}
-		else if(CPAnt != null)
-		{
-			if(GetComponent<Visualizacion>().LadoAct == Visualizacion.Lado.Der)
-				transform.position = CPAnt.transform.position + CPAnt.transform.right * Random.Range(RangMinDer, RangMaxDer);
-			else
-				transform.position = CPAnt.transform.position + CPAnt.transform.right * Random.Range(RangMinDer * (-1), RangMaxDer * (-1));
-			transform.forward = CPAnt.transform.forward;
+				transform.position = cp.transform.position - offset;
+			transform.forward = cp.transform.forward;
 		}
 		
 		IgnorarColision(true);
-		
 	}
-	
 	public void Respawnear(Vector3 pos)
 	{
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -92,7 +77,6 @@ public class Respawn : MonoBehaviour
 		
 		IgnorarColision(true);
 	}
-	
 	public void Respawnear(Vector3 pos, Vector3 dir)
 	{
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -104,16 +88,6 @@ public class Respawn : MonoBehaviour
 		
 		IgnorarColision(true);
 	}
-	
-	public void AgregarCP(CheakPoint cp)
-	{
-		if(cp != CPAct)
-		{
-			CPAnt = CPAct;
-			CPAct = cp;
-		}
-	}
-	
 	void IgnorarColision(bool b)
 	{
 		//no contempla si los dos camiones respawnean relativamente cerca en el espacio 
@@ -125,8 +99,4 @@ public class Respawn : MonoBehaviour
 		IgnorandoColision = b;	
 		Tempo = 0;
 	}
-	
-	
-	
-	
 }
