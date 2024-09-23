@@ -7,51 +7,55 @@ public class Bolsa : MonoBehaviour
 	public Pallet.Valores Monto;
 	//public int IdPlayer = 0;
 	public string TagPlayer = "";
-	public Texture2D ImagenInventario;
-	Player Pj = null;
 	
-	bool Desapareciendo;
 	public GameObject Particulas;
-	[FormerlySerializedAs("TiempParts")] public float TiempoRespawn = 2.5f;
 	float timerRespawn;
+	[SerializeField] Renderer rend;
+	[SerializeField] Collider coll;
+	bool activada = true;
 
-	// Use this for initialization
-	void Start () 
+	public System.Action<bool> Activada;
+
+	void Awake () 
 	{
 		Monto = Pallet.Valores.Valor2;
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		if(!Desapareciendo) return;
 		
-		timerRespawn -= Time.deltaTime;
-		if (timerRespawn <= 0)
-		{
-			GetComponent<Renderer>().enabled = true;
-			GetComponent<Collider>().enabled = true;
-			Desapareciendo = false;
-		}
+		if(!rend) rend = GetComponent<Renderer>();
+		if(!coll) coll = GetComponent<Collider>();
+
+		//if both components are enabled, bag is active
+		activada = rend.enabled && coll.enabled; 
 	}
-	
 	void OnTriggerEnter(Collider coll)
 	{
 		if(coll.tag == TagPlayer)
 		{
-			Pj = coll.GetComponent<Player>();
+			coll.TryGetComponent(out Player Pj);
 			if(Pj.AgregarBolsa(this))
 				Desaparecer();
 		}
 	}
-	
-	public void Desaparecer()
+	public void Aparecer()
 	{
-		Instantiate(Particulas, transform.position, Quaternion.identity);
-		Desapareciendo = true;
-		timerRespawn = TiempoRespawn;
+		if(activada) return;
+		activada = true;
 		
-		GetComponent<Renderer>().enabled = false;
-		GetComponent<Collider>().enabled = false;
+		rend.enabled = true;
+		coll.enabled = true;
+		
+		Activada?.Invoke(true);
+	}
+	public void Desaparecer(bool discreto = false)
+	{
+		if(!activada) return;
+		activada = false;
+		
+		if(!discreto)
+			Instantiate(Particulas, transform.position, Quaternion.identity);
+		
+		rend.enabled = false;
+		coll.enabled = false;
+		
+		Activada?.Invoke(false);
 	}
 }

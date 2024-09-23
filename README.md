@@ -2,4 +2,5 @@
 
 # Design Patterns:
 Command Pattern = LoadUICommand
-Singleton Pattern = LoadUIManager / InputManager / GameManager
+Singleton Pattern = LoadUIManager / InputManager / GameManager / ZoneManager
+ObjectPool Pattern = MoneyManager

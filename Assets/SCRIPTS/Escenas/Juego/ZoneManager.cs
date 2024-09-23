@@ -63,7 +63,7 @@ namespace Brinks.Gameplay
             Vector2Int newZoneRange = new Vector2Int(int.MaxValue, zoneRange.y);
             
             //Update players checkpoint;
-            for (int i = zoneRange.x; i < checkpoints.Count; i++)
+            for (int i = zoneRange.x; i < checkpoints.Count && players.Count > 0; i++)
             {
                 int j = 0;
                 while (players.Count > 0 && j < players.Count)
