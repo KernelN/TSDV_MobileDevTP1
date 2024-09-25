@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class MngPts : MonoBehaviour
 {
-    Rect R = new Rect();
-
     public float TiempEmpAnims = 2.5f;
     float Tempo = 0;
 
