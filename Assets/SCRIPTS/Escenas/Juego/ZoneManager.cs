@@ -96,7 +96,7 @@ namespace Brinks.Gameplay
             //Get oldest checkpoint
             for (int i = 0; i < this.players.Length; i++)
             {
-                if(playerCurrentCheckpoints[i] < zoneRange.x) 
+                if(playerCurrentCheckpoints[i] <= zoneRange.x) 
                     newZoneRange.x = playerCurrentCheckpoints[i];
             }
             

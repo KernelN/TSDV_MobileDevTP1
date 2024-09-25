@@ -23,7 +23,7 @@ public class MngPts : MonoBehaviour
 
     public bool ActivadoAnims = false;
 
-    Visualizacion Viz = new Visualizacion();
+    Visualizacion Viz;
 
     //---------------------------------//
 
@@ -70,10 +70,10 @@ public class MngPts : MonoBehaviour
                     TempoParpadeo += 0.1f;
                 
                 PrimerImaParp = !PrimerImaParp;
-                if(DatosPartida.LadoGanadaor == DatosPartida.Lados.Solo)
+                if(DatosPartida.LadoGanador == DatosPartida.Lados.Solo)
                     PanelesDinero[0].SetActive(PrimerImaParp);
                 else
-                    PanelesDinero[(int)DatosPartida.LadoGanadaor].SetActive(!PrimerImaParp);
+                    PanelesDinero[(int)DatosPartida.LadoGanador].SetActive(!PrimerImaParp);
             }
         }
         else
@@ -99,7 +99,7 @@ public class MngPts : MonoBehaviour
 
     void SetGanador()
     {
-        switch (DatosPartida.LadoGanadaor)
+        switch (DatosPartida.LadoGanador)
         {
             case DatosPartida.Lados.Solo:
                 Ganador.sprite = Ganadores[0];
