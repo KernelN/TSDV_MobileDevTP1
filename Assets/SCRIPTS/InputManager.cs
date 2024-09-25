@@ -5,12 +5,14 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager inst;
     
+    [Header("Set Values")]
     [SerializeField] VirtualJoystick Joystick1;
     [SerializeField] VirtualJoystick Joystick2;
     [SerializeField] bool forceMobile = false;
+    [Header("Runtime Values")]
+    public bool has2Players;
     bool isMobile;
 
-    public bool has2Players;
     public Vector2 Axis1 { get; private set; }
     public Vector2 Axis2 { get; private set; }
     
