@@ -44,6 +44,20 @@ namespace Brinks.Gameplay
             {
                 moneyBags[i].Desaparecer(true); //disable it, just in case
                 
+                //If easy, use all spawn points
+                //If normal, use every other spawn point
+                //If hard, use every third spawn point
+                switch (DatosPartida.DificultadJuego)
+                {
+                    case DatosPartida.Dificultad.Facil: break;
+                    case DatosPartida.Dificultad.Normal:
+                        if(i % 2 == 0) continue;
+                        break;
+                    case DatosPartida.Dificultad.Dificil:
+                        if(i % 3 == 0) continue;
+                        break;
+                }
+                
                 //Update pools when bags are picked
                 int index = i;
                 moneyBags[i].Activada += (isActive) =>

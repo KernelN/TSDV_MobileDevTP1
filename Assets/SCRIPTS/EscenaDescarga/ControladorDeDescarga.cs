@@ -33,7 +33,9 @@ public class ControladorDeDescarga : MonoBehaviour
 	public Cinta Cin2;
 	
 	public float Bonus = 0;
+	const float PerdidaPorSegDificil = 1.5f;
 	float TempoBonus;
+	float TempoMod;
 	
 	
 	public AnimMngDesc ObjAnimado;
@@ -53,6 +55,17 @@ public class ControladorDeDescarga : MonoBehaviour
 		Pj.SetContrDesc(this);
 		if(ObjAnimado != null)
 			ObjAnimado.ContrDesc = this;
+
+		switch (DatosPartida.DificultadJuego)
+		{
+			case DatosPartida.Dificultad.Facil:
+			case DatosPartida.Dificultad.Normal:
+				TempoMod = 1;
+				break;
+			case DatosPartida.Dificultad.Dificil:
+				TempoMod = PerdidaPorSegDificil;
+				break;
+		}
 	}
 	
 	// Update is called once per frame
@@ -64,7 +77,7 @@ public class ControladorDeDescarga : MonoBehaviour
 			if(TempoBonus > 0)
 			{
 				Bonus = (TempoBonus * (float)PEnMov.Valor) / PEnMov.Tiempo;
-				TempoBonus -= T.GetDT();
+				TempoBonus -= T.GetDT() * TempoMod;
 			}
 			else
 			{

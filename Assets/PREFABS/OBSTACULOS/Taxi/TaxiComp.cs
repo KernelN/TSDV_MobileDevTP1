@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// basicamente lo que hace es que viaja en linea recta y ocacionalmente gira para un cosatado
@@ -9,10 +8,17 @@ public class TaxiComp : MonoBehaviour
 {
 	public string FinTaxiTag = "FinTaxi";
 	public string LimiteTag = "Terreno";
-	
+
 	public float Vel = 0;
+	float velFinal;
+	const float velDifMod = 1.5f;
 	
 	public Vector2 TiempCadaCuantoDobla_MaxMin = Vector2.zero;
+	const float TiempEntreGiroFacMod = 1.5f;
+	
+	public float DuracionGiroMax = 0.5f;
+	
+	public float DuracionGiroMin = 0.1f;
 	
 	public float DuracionGiro = 0;
 	float TempoDurGir = 0;
@@ -37,15 +43,23 @@ public class TaxiComp : MonoBehaviour
 	Transform[] players;
 	
 	
-	enum Lado{Der, Izq}
+	enum Lado{ Der, Izq }
 	
 	//-----------------------------------------------------------------//
 
 	// Use this for initialization
 	void Start () 
 	{
-		TiempEntreGiro = (float) Random.Range(TiempCadaCuantoDobla_MaxMin.x, TiempCadaCuantoDobla_MaxMin.y);
-		RotIni = this.transform.localEulerAngles;
+		TiempEntreGiro = Random.Range(TiempCadaCuantoDobla_MaxMin.x,
+										TiempCadaCuantoDobla_MaxMin.y);
+		if(DatosPartida.DificultadJuego == DatosPartida.Dificultad.Facil)
+				TiempEntreGiro *= TiempEntreGiroFacMod;
+
+		velFinal = Vel;
+		if (DatosPartida.DificultadJuego == DatosPartida.Dificultad.Dificil)
+			velFinal *= velDifMod;
+		
+		RotIni = transform.localEulerAngles;
 		PosIni = transform.position;
 
 		
@@ -59,7 +73,6 @@ public class TaxiComp : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		
 		if(Respawneando)
 		{
 			if(Medicion())
@@ -86,10 +99,7 @@ public class TaxiComp : MonoBehaviour
 				}
 			}
 		}
-		
-		
 	} 
-	
 	void OnTriggerEnter(Collider coll)
 	{
 		if(coll.tag == FinTaxiTag)
@@ -98,7 +108,6 @@ public class TaxiComp : MonoBehaviour
 			transform.localEulerAngles = RotIni;
 		}		
 	}
-	
 	void OnCollisionEnter(Collision coll)
 	{
 		if(coll.transform.tag == LimiteTag)
@@ -106,10 +115,9 @@ public class TaxiComp : MonoBehaviour
 			Respawneando = true;
 		}
 	}
-	
 	void FixedUpdate () 
 	{
-		this.transform.position += transform.forward * Time.fixedDeltaTime * Vel;
+		transform.position += transform.forward * (Time.fixedDeltaTime * velFinal);
 	}
 	
 	//--------------------------------------------------------------------//
