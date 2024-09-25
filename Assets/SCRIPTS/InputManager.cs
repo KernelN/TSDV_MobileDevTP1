@@ -9,7 +9,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] VirtualJoystick Joystick2;
     [SerializeField] bool forceMobile = false;
     bool isMobile;
-    
+
+    public bool has2Players;
     public Vector2 Axis1 { get; private set; }
     public Vector2 Axis2 { get; private set; }
     
@@ -35,7 +36,8 @@ public class InputManager : MonoBehaviour
         if(!isMobile)
         {
             Joystick1.gameObject.SetActive(false);
-            Joystick2.gameObject.SetActive(false);
+            if(has2Players)
+                Joystick2.gameObject.SetActive(false);
         }
     }
     void Update()
@@ -43,7 +45,8 @@ public class InputManager : MonoBehaviour
         if (isMobile)
         {
             Axis1 = Joystick1.GetAxis();
-            Axis2 = Joystick2.GetAxis();
+            if(has2Players)
+                Axis2 = Joystick2.GetAxis();
         }
         else
         {
@@ -53,6 +56,8 @@ public class InputManager : MonoBehaviour
             axis.y = Input.GetKey(KeyCode.W) ? 1 : Input.GetKey(KeyCode.S) ? -1 : 0;
             Axis1 = axis;
             
+            if(!has2Players) return;
+                
             //Get axis of player 2
             axis = new Vector2();
             axis.x = Input.GetKey(KeyCode.LeftArrow) ? -1 : 

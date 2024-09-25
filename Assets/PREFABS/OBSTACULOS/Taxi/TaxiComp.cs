@@ -33,6 +33,8 @@ public class TaxiComp : MonoBehaviour
 	RaycastHit RH;
 	
 	bool Respawneando = false;
+
+	Transform[] players;
 	
 	
 	enum Lado{Der, Izq}
@@ -45,6 +47,13 @@ public class TaxiComp : MonoBehaviour
 		TiempEntreGiro = (float) Random.Range(TiempCadaCuantoDobla_MaxMin.x, TiempCadaCuantoDobla_MaxMin.y);
 		RotIni = this.transform.localEulerAngles;
 		PosIni = transform.position;
+
+		
+		GameManager gm = GameManager.Instancia;
+		if (gm.DosJugadores)
+			players = new[] { gm.Player1.transform, gm.Player2.transform };
+		else
+			players = new[] { gm.Player1.transform };
 	}
 	
 	// Update is called once per frame
@@ -186,12 +195,14 @@ public class TaxiComp : MonoBehaviour
 	
 	bool Medicion()
 	{
-		float dist1 = (GameManager.Instancia.Player1.transform.position - PosIni).magnitude;
-		float dist2 = (GameManager.Instancia.Player2.transform.position - PosIni).magnitude;
-		
-		if(dist1 > 4 && dist2 > 4)
-			return true;
-		else
-			return false;
+		const int distMinAlCuadrado = 4 * 4;
+
+		//Si algun player está más cerca que la distancia minima, la medicion falló
+		for (int i = 0; i < players.Length; i++)
+			if ((players[i].position - PosIni).sqrMagnitude < distMinAlCuadrado)
+				return false;
+
+		//Si ninguno está cerca, funcionó
+		return true;
 	}
 }

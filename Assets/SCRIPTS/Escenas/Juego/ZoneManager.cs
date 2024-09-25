@@ -43,13 +43,19 @@ namespace Brinks.Gameplay
         }
         void Start()
         {
-            players = new Transform[2];
-            playerCurrentCheckpoints = new [] {0, 0};
-            players[0] = GameManager.Instancia.Player1.transform;
-            players[1] = GameManager.Instancia.Player2.transform;
+            GameManager gm = GameManager.Instancia;
+
+            if (gm.DosJugadores)
+                players = new[] { gm.Player1.transform, gm.Player2.transform };
+            else
+                players = new[] { gm.Player1.transform };
             
+            playerCurrentCheckpoints = new int[players.Length];
             for (int i = 0; i < players.Length; i++)
+            {
+                playerCurrentCheckpoints[i] = 0;
                 playersCpByHash.Add(players[i].GetHashCode(), checkpoints[0]);
+            }
         }
         void Update()
         {

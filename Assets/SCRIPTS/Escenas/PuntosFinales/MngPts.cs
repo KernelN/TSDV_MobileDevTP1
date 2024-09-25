@@ -72,7 +72,10 @@ public class MngPts : MonoBehaviour
                     TempoParpadeo += 0.1f;
                 
                 PrimerImaParp = !PrimerImaParp;
-                PanelesDinero[(int)DatosPartida.LadoGanadaor].SetActive(!PrimerImaParp);
+                if(DatosPartida.LadoGanadaor == DatosPartida.Lados.Solo)
+                    PanelesDinero[0].SetActive(PrimerImaParp);
+                else
+                    PanelesDinero[(int)DatosPartida.LadoGanadaor].SetActive(!PrimerImaParp);
             }
         }
         else
@@ -100,12 +103,15 @@ public class MngPts : MonoBehaviour
     {
         switch (DatosPartida.LadoGanadaor)
         {
+            case DatosPartida.Lados.Solo:
+                Ganador.sprite = Ganadores[0];
+                TextosDinero[0].text = "$" + Viz.PrepararNumeros(DatosPartida.PtsGanador);
+                break;
             case DatosPartida.Lados.Der:
                 Ganador.sprite = Ganadores[1];
                 TextosDinero[1].text = "$" + Viz.PrepararNumeros(DatosPartida.PtsGanador);
                 TextosDinero[0].text = "$" + Viz.PrepararNumeros(DatosPartida.PtsPerdedor);
                 break;
-
             case DatosPartida.Lados.Izq:
                 Ganador.sprite = Ganadores[0];
                 TextosDinero[0].text = "$" + Viz.PrepararNumeros(DatosPartida.PtsGanador);

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     public Player Player1;
     public Player Player2;
+    public bool DosJugadores => Player2 != null;
 
     bool ConteoRedresivo = true;
     public Rect ConteoPosEsc;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator Start()
     {
+        InputManager.inst.has2Players = DosJugadores;
         yield return null;
         IniciarTutorial();
     }
@@ -82,7 +84,7 @@ public class GameManager : MonoBehaviour
             case EstadoJuego.Calibrando:
                 if (InputManager.inst.Axis1.y > 0)
                     Player1.Seleccionado = true;
-                if (InputManager.inst.Axis2.y > 0)
+                if (DosJugadores && InputManager.inst.Axis2.y > 0)
                     Player2.Seleccionado = true;
                 break;
             case EstadoJuego.Jugando:
@@ -157,7 +159,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < ObjsCalibracion1.Length; i++)
         {
             ObjsCalibracion1[i].SetActive(true);
-            ObjsCalibracion2[i].SetActive(true);
+            if(DosJugadores)
+                ObjsCalibracion2[i].SetActive(true);
         }
 
         for (int i = 0; i < ObjsCarrera.Length; i++)
@@ -166,7 +169,8 @@ public class GameManager : MonoBehaviour
         }
 
         Player1.CambiarATutorial();
-        Player2.CambiarATutorial();
+        if(DosJugadores)
+            Player2.CambiarATutorial();
 
         TiempoDeJuegoText.transform.parent.gameObject.SetActive(false);
         ConteoInicio.gameObject.SetActive(false);
@@ -177,6 +181,8 @@ public class GameManager : MonoBehaviour
         Player1.GetComponent<Frenado>().RestaurarVel();
         Player1.GetComponent<ControlDireccion>().Habilitado = true;
 
+        if(!DosJugadores) return;
+        
         Player2.GetComponent<Frenado>().RestaurarVel();
         Player2.GetComponent<ControlDireccion>().Habilitado = true;
     }
@@ -187,35 +193,46 @@ public class GameManager : MonoBehaviour
 
         TiempoDeJuego = 0;
 
-        if (Player1.Dinero > Player2.Dinero)
+        if (DosJugadores)
         {
-            //lado que gano
-            if (Player1.LadoActual == Visualizacion.Lado.Der)
-                DatosPartida.LadoGanadaor = DatosPartida.Lados.Der;
+            if (Player1.Dinero > Player2.Dinero)
+            {
+                //lado que gano
+                if (Player1.LadoActual == Visualizacion.Lado.Der)
+                    DatosPartida.LadoGanadaor = DatosPartida.Lados.Der;
+                else
+                    DatosPartida.LadoGanadaor = DatosPartida.Lados.Izq;
+                //puntajes
+                DatosPartida.PtsGanador = Player1.Dinero;
+                DatosPartida.PtsPerdedor = Player2.Dinero;
+            }
             else
-                DatosPartida.LadoGanadaor = DatosPartida.Lados.Izq;
-            //puntajes
-            DatosPartida.PtsGanador = Player1.Dinero;
-            DatosPartida.PtsPerdedor = Player2.Dinero;
+            {
+                //lado que gano
+                if (Player2.LadoActual == Visualizacion.Lado.Der)
+                    DatosPartida.LadoGanadaor = DatosPartida.Lados.Der;
+                else
+                    DatosPartida.LadoGanadaor = DatosPartida.Lados.Izq;
+
+                //puntajes
+                DatosPartida.PtsGanador = Player2.Dinero;
+                DatosPartida.PtsPerdedor = Player1.Dinero;
+            }
         }
         else
         {
-            //lado que gano
-            if (Player2.LadoActual == Visualizacion.Lado.Der)
-                DatosPartida.LadoGanadaor = DatosPartida.Lados.Der;
-            else
-                DatosPartida.LadoGanadaor = DatosPartida.Lados.Izq;
-
-            //puntajes
-            DatosPartida.PtsGanador = Player2.Dinero;
-            DatosPartida.PtsPerdedor = Player1.Dinero;
+            DatosPartida.PtsGanador = Player1.Dinero;
+            DatosPartida.LadoGanadaor = DatosPartida.Lados.Solo;
         }
 
         Player1.GetComponent<Frenado>().Frenar();
-        Player2.GetComponent<Frenado>().Frenar();
-
         Player1.ContrDesc.FinDelJuego();
-        Player2.ContrDesc.FinDelJuego();
+
+        if (DosJugadores)
+        {
+            Player2.GetComponent<Frenado>().Frenar();
+            Player2.ContrDesc.FinDelJuego();
+        }
     }
 
     //se encarga de posicionar la camara derecha para el jugador que esta a la derecha y viseversa
@@ -258,13 +275,27 @@ public class GameManager : MonoBehaviour
             ObjsCalibracion1[i].SetActive(false);
         }
 
-        Player2.FinCalibrado = true;
-
-        for (int i = 0; i < ObjsCalibracion2.Length; i++)
+        if (DosJugadores)
         {
-            ObjsCalibracion2[i].SetActive(false);
+            Player2.FinCalibrado = true;
+            for (int i = 0; i < ObjsCalibracion2.Length; i++)
+                ObjsCalibracion2[i].SetActive(false);
         }
 
+        Player1.gameObject.transform.position = PosCamionesCarrera[0];
+
+        Player1.transform.forward = Vector3.forward;
+        Player1.GetComponent<Frenado>().Frenar();
+        Player1.CambiarAConduccion();
+
+        Player1.GetComponent<Frenado>().RestaurarVel();
+        Player1.GetComponent<ControlDireccion>().Habilitado = false;
+        Player1.transform.forward = Vector3.forward;
+
+        TiempoDeJuegoText.transform.parent.gameObject.SetActive(false);
+        ConteoInicio.gameObject.SetActive(false);
+
+        if (!DosJugadores) return;
 
         //posiciona los camiones dependiendo de que lado de la pantalla esten
         if (Player1.LadoActual == Visualizacion.Lado.Izq)
@@ -278,39 +309,31 @@ public class GameManager : MonoBehaviour
             Player2.gameObject.transform.position = PosCamionesCarrera[0];
         }
 
-        Player1.transform.forward = Vector3.forward;
-        Player1.GetComponent<Frenado>().Frenar();
-        Player1.CambiarAConduccion();
-
         Player2.transform.forward = Vector3.forward;
         Player2.GetComponent<Frenado>().Frenar();
         Player2.CambiarAConduccion();
 
         //los deja andando
-        Player1.GetComponent<Frenado>().RestaurarVel();
         Player2.GetComponent<Frenado>().RestaurarVel();
         //cancela la direccion
-        Player1.GetComponent<ControlDireccion>().Habilitado = false;
         Player2.GetComponent<ControlDireccion>().Habilitado = false;
         //les de direccion
-        Player1.transform.forward = Vector3.forward;
         Player2.transform.forward = Vector3.forward;
-
-        TiempoDeJuegoText.transform.parent.gameObject.SetActive(false);
-        ConteoInicio.gameObject.SetActive(false);
     }
 
     public void FinCalibracion(int playerID)
     {
         if (playerID == 0)
-        {
             Player1.FinTuto = true;
-        }
 
-        if (playerID == 1)
+        if (!DosJugadores)
         {
-            Player2.FinTuto = true;
+            if(Player1.FinTuto) CambiarACarrera();
+            return;
         }
+        
+        if (playerID == 1)
+            Player2.FinTuto = true;
 
         if (Player1.FinTuto && Player2.FinTuto)
             CambiarACarrera();
