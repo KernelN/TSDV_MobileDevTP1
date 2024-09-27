@@ -61,7 +61,7 @@ public class ContrCalibracion : MonoBehaviour
 	{
 		EstAct = Estados.Finalizado;
         palletsMover.enabled = false;
-        GameManager.Instancia.FinCalibracion(Pj.IdPlayer);
+        GameplayManager.Instancia.FinCalibracion(Pj.IdPlayer);
 	}
 	
 	void SetActivComp(bool estado)

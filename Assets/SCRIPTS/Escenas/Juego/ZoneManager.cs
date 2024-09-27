@@ -43,7 +43,7 @@ namespace Brinks.Gameplay
         }
         void Start()
         {
-            GameManager gm = GameManager.Instancia;
+            GameplayManager gm = GameplayManager.Instancia;
 
             if (gm.DosJugadores)
                 players = new[] { gm.Player1.transform, gm.Player2.transform };
