@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using Brinks;
 using TMPro;
 
 public class GameplayManager : MonoBehaviour
@@ -76,7 +77,7 @@ public class GameplayManager : MonoBehaviour
         //CIERRA LA APLICACION
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            GameManager.inst.QuitGame();
         }
 
         switch (EstAct)

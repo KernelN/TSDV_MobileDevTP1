@@ -163,6 +163,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.NIn.Brinks
     Standalone: com.NIn.Brinks
+    iPhone: com.NIn.Brinks
   buildNumber:
     Standalone: 0
     VisionOS: 0

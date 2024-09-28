@@ -100,6 +100,9 @@ namespace Brinks.Gameplay
                     newZoneRange.x = playerCurrentCheckpoints[i];
             }
             
+            if(newZoneRange.x > checkpoints.Count)
+                newZoneRange.x = zoneRange.x > checkpoints.Count ? 0 : zoneRange.x;
+            
             //Update zone range
             if (newZoneRange.x != zoneRange.x || newZoneRange.y != zoneRange.y)
             {

@@ -29838,7 +29838,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37b24f6c536862e4ab8ffed7047aa9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxZoneOffset: 3
+  easyMaxZoneOffset: 3
+  normalMaxZoneOffset: 1
+  hardMaxZoneOffset: 0
   spawnPosByZone:
   - spawnPos: []
     free: 

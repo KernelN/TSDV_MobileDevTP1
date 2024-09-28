@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Brinks.Gameplay
 {
@@ -15,7 +16,8 @@ namespace Brinks.Gameplay
         }
         
         //[Header("Set Values")]
-        [SerializeField, Min(0)] int maxZoneOffset = 2;
+        [FormerlySerializedAs("easyMaxZoneOffset")]
+        [SerializeField] int maxZoneOffset = 2;
         [SerializeField] BagZone[] spawnPosByZone;
         [SerializeField] Bolsa[] moneyBags;
         //[Header("Runtime Values")]
@@ -38,26 +40,23 @@ namespace Brinks.Gameplay
             activeBagsZone = new List<Vector2Int>();
             
             inactiveBags = new List<Bolsa>();
-            inactiveBags.AddRange(moneyBags);
             
             for (int i = 0; i < moneyBags.Length; i++)
             {
                 moneyBags[i].Desaparecer(true); //disable it, just in case
                 
-                //If easy, use all spawn points
-                //If normal, use every other spawn point
-                //If hard, use every third spawn point
+                //If easy|normal, use all spawn points
+                //If hard, use every other spawn point
                 switch (DatosPartida.DificultadJuego)
                 {
                     case DatosPartida.Dificultad.Facil: break;
-                    case DatosPartida.Dificultad.Normal:
-                        if(i % 2 == 0) continue;
-                        break;
                     case DatosPartida.Dificultad.Dificil:
-                        if(i % 3 == 0) continue;
+                        if(i % 2 == 0) continue;
                         break;
                 }
                 
+                inactiveBags.Add(moneyBags[i]);
+
                 //Update pools when bags are picked
                 int index = i;
                 moneyBags[i].Activada += (isActive) =>
@@ -86,7 +85,7 @@ namespace Brinks.Gameplay
                 int oldestZone = ZoneManager.inst.zoneRange.x;
                 
                 //Check all active bags
-                for (int i = 0; i < activeBagsZone.Count; i++)
+                for (int i = 0; i < activeBags.Count; i++)
                 {
                     //If there are more bags after this index
                     //AND current bag is in an older zone than the oldest zone
@@ -104,7 +103,7 @@ namespace Brinks.Gameplay
                     maxZone = spawnPosByZone.Length;
                 
                 //Try to spawn bags for each new zone
-                for (int i = newestZone; i < maxZone; i++)
+                for (int i = newestZone; i <= maxZone; i++)
                     for (int j = 0; j < spawnPosByZone[i].spawnPos.Length; j++)
                         ForceSpawnBag();
             };
